@@ -1,0 +1,2135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Namma Sanchar</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --panel: #ffffff;
+      --panel-soft: #eef3f8;
+      --ink: #17202a;
+      --muted: #667085;
+      --line: #d9e2ec;
+      --blue: #1d4ed8;
+      --cyan: #0891b2;
+      --green: #15803d;
+      --amber: #b45309;
+      --red: #b91c1c;
+      --violet: #6d28d9;
+      --shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--ink);
+      background:
+        linear-gradient(180deg, rgba(244, 247, 251, 0.96), rgba(244, 247, 251, 0.96)),
+        url("data:image/svg+xml,%3Csvg width='120' height='120' viewBox='0 0 120 120' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' stroke='%23cad5e2' stroke-width='1'%3E%3Cpath d='M0 30h120M0 90h120M30 0v120M90 0v120'/%3E%3Cpath d='M0 0l120 120M120 0L0 120' opacity='.25'/%3E%3C/g%3E%3C/svg%3E");
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 250px minmax(0, 1fr);
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      padding: 22px 16px;
+      color: #e6edf6;
+      background: #121826;
+      border-right: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 26px;
+      padding: 0 8px;
+    }
+
+    .brand-mark {
+      display: grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      color: #9aa7b8;
+      font-size: 12px;
+    }
+
+    .nav {
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav button {
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr);
+      align-items: center;
+      width: 100%;
+      min-height: 42px;
+      padding: 9px 10px;
+      color: #b9c4d3;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      text-align: left;
+    }
+
+    .nav button span:first-child {
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      color: #d7e1ee;
+      font-weight: 700;
+    }
+
+    .nav button.active {
+      color: #ffffff;
+      background: #1d2939;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .nav button:hover {
+      background: #202b3c;
+      color: white;
+    }
+
+    .sidebar-footer {
+      position: absolute;
+      right: 16px;
+      bottom: 18px;
+      left: 16px;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      display: grid;
+      grid-template-columns: 28px minmax(0, 1fr);
+      align-items: center;
+      width: 100%;
+      min-height: 42px;
+      padding: 9px 10px;
+      color: #b9c4d3;
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      text-align: left;
+    }
+
+    .nav button span:first-child {
+      display: grid;
+      place-items: center;
+      width: 24px;
+      height: 24px;
+      color: #d7e1ee;
+      font-weight: 700;
+    }
+
+    .nav button.active {
+      color: #ffffff;
+      background: #1d2939;
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .nav button:hover {
+      background: #202b3c;
+      color: white;
+    }
+
+    .sidebar-footer {
+      position: absolute;
+      right: 16px;
+      bottom: 18px;
+      left: 16px;
+      padding: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      color: #aab6c7;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    main {
+      min-width: 0;
+      padding: 22px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .page-title h2 {
+      margin: 0;
+      font-size: clamp(24px, 2.4vw, 34px);
+      letter-spacing: 0;
+    }
+
+    .page-title p {
+      margin: 6px 0 0;
+      color: var(--muted);
+    }
+
+    .live-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 36px;
+      padding: 8px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--panel);
+      box-shadow: var(--shadow);
+      color: var(--green);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .pulse {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 0 6px rgba(34, 197, 94, 0.13);
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+      animation: enter 180ms ease-out;
+    }
+
+    @keyframes enter {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid.cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .grid.cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid.cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .panel,
+    .metric,
+    .incident-card,
+    .route-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .panel {
+      padding: 18px;
+    }
+
+    .panel-header {
+              animation: enter 180ms ease-out;
+    }
+
+    @keyframes enter {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+
+    .grid.cols-4 {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .grid.cols-3 {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .grid.cols-2 {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .panel,
+    .metric,
+    .incident-card,
+    .route-card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: var(--panel);
+      box-shadow: var(--shadow);
+    }
+
+    .panel {
+      padding: 18px;
+    }
+
+    .panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .panel-header h3,
+    .metric h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .panel-header p,
+    .metric p {
+      margin: 4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .metric {
+      position: relative;
+      overflow: hidden;
+      min-height: 128px;
+      padding: 18px;
+    }
+
+    .metric::after {
+      content: "";
+      position: absolute;
+      right: -24px;
+      bottom: -28px;
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background: var(--accent, #1d4ed8);
+      opacity: 0.12;
+    }
+
+    .metric strong {
+      display: block;
+      margin-top: 14px;
+      font-size: clamp(28px, 3vw, 42px);
+      line-height: 1;
+    }
+
+    .metric small {
+      display: inline-block;
+      margin-top: 10px;
+      color: var(--muted);
+    }
+
+    .risk-list,
+    .feed,
+    .timeline,
+    .calendar {
+      display: grid;
+      gap: 10px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .risk-row,
+    .feed-row,
+    .calendar-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 12px;
+      min-height: 48px;
+      padding: 11px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdff;
+    }
+
+    .feed-row {
+      grid-template-columns: 44px minmax(0, 1fr) auto;
+      padding-left: 14px;
+    }
+    .feed-row.no-icon div {
+      min-width: 0;
+    }
+    .feed-row.no-icon strong {
+      display: block;
+      white-space: nowrap;
+      overflow: visible;
+      text-overflow: clip;
+    }
+    .feed-row.no-icon > small {
+      min-width: 48px;
+      text-align: right;
+    }
+    .feed-row.no-icon small:last-child {
+      justify-self: end;
+      white-space: nowrap;
+    }
+    .feed-row.no-icon {
+      grid-template-columns: 1fr 42px;
+      column-gap: 8px;
+    }
+
+    .feed-row.no-icon small:last-child {
+      justify-self: end;
+      white-space: nowrap;
+      min-width: 42px;
+      text-align: right;
+    }
+    .type-icon {
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      color: white;
+      background: var(--blue);
+      font-weight: 800;
+    }
+
+    .risk-row strong,
+    .feed-row strong,
+    .calendar-row strong {
+      display: block;
+      overflow-wrap: anywhere;
+    }
+
+    .risk-row small,
+    .feed-row small,
+    .calendar-row small {
+      color: var(--muted);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 28px;
+      padding: 5px 10px;
+      border-radius: 999px;
+      color: white;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .pill.red { background: var(--red); }
+    .pill.amber { background: var(--amber); }
+    .pill.green { background: var(--green); }
+    .pill.blue { background: var(--blue); }
+    .pill.violet { background: var(--violet); }
+    .pill.gray { background: #475467; }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    label {
+      display: grid;
+      gap: 7px;
+      color: #344054;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      min-height: 42px;
+      padding: 10px 11px;
+      border: 1px solid #cfd8e3;
+      border-radius: 8px;
+      background: #ffffff;
+      color: var(--ink);
+      outline: none;
+    }
+
+    textarea {
+      min-height: 104px;
+      resize: vertical;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.12);
+    }
+
+    .full {
+      grid-column: 1 / -1;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .btn {
+      min-height: 42px;
+      padding: 10px 14px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      background: var(--blue);
+      color: white;
+      font-weight: 800;
+    }
+
+    .btn.secondary {
+      border-color: var(--line);
+      background: #ffffff;
+      color: var(--ink);
+    }
+
+    .tracker {
+        display: grid;
+      gap: 12px;
+    }
+
+    .incident-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 14px;
+      padding: 14px;
+    }
+
+    .incident-card h4 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .incident-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .status-select {
+      width: 150px;
+    }
+
+    .score-card {
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      min-height: 234px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at center, rgba(185, 28, 28, 0.08) 0 42%, transparent 43%),
+        #ffffff;
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .score-ring {
+      display: grid;
+      place-items: center;
+      width: 148px;
+      height: 148px;
+      border-radius: 50%;
+      background:
+        conic-gradient(var(--score-color, var(--red)) calc(var(--score, 78) * 1%), #e5e7eb 0);
+    }
+
+    .score-ring div {
+      display: grid;
+      place-items: center;
+      width: 108px;
+      height: 108px;
+      border-radius: 50%;
+      background: white;
+      font-size: 34px;
+      font-weight: 900;
+    }
+
+    .analysis-results {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .result-box {
+      min-height: 96px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdff;
+    }
+
+    .result-box span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .result-box strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 24px;
+    }
+
+    .map-wrap {
+        position: relative;
+      min-height: 520px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(29, 78, 216, 0.08) 1px, transparent 1px),
+        linear-gradient(rgba(29, 78, 216, 0.08) 1px, transparent 1px),
+        #edf5fb;
+      background-size: 46px 46px;
+      box-shadow: var(--shadow);
+    }
+
+    .map-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .map-label {
+      position: absolute;
+      padding: 7px 9px;
+      border: 1px solid rgba(23, 32, 42, 0.12);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+      font-size: 12px;
+      font-weight: 800;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+    }
+
+    .hotspot {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: var(--size);
+      height: var(--size);
+      border-radius: 50%;
+      color: white;
+      background: var(--hot);
+      box-shadow: 0 0 0 10px color-mix(in srgb, var(--hot) 18%, transparent);
+      font-size: 12px;
+      font-weight: 900;
+      transform: translate(-50%, -50%);
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .dot {
+              gap: 12px;
+    }
+
+    .result-box {
+      min-height: 96px;
+      padding: 14px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #fbfdff;
+    }
+
+    .result-box span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    .result-box strong {
+      display: block;
+      margin-top: 8px;
+      font-size: 24px;
+    }
+
+    .map-wrap {
+      position: relative;
+      min-height: 520px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background:
+        linear-gradient(90deg, rgba(29, 78, 216, 0.08) 1px, transparent 1px),
+        linear-gradient(rgba(29, 78, 216, 0.08) 1px, transparent 1px),
+        #edf5fb;
+      background-size: 46px 46px;
+      box-shadow: var(--shadow);
+    }
+
+    .map-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .map-label {
+      position: absolute;
+      padding: 7px 9px;
+      border: 1px solid rgba(23, 32, 42, 0.12);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.12);
+      font-size: 12px;
+      font-weight: 800;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+    }
+
+    .hotspot {
+      position: absolute;
+      display: grid;
+      place-items: center;
+      width: var(--size);
+      height: var(--size);
+      border-radius: 50%;
+      color: white;
+      background: var(--hot);
+      box-shadow: 0 0 0 10px color-mix(in srgb, var(--hot) 18%, transparent);
+      font-size: 12px;
+      font-weight: 900;
+      transform: translate(-50%, -50%);
+    }
+
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .legend span {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .dot {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+      background: var(--dot);
+    }
+
+    .intel-layout {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    .station-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .station-list button {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 10px;
+      width: 100%;
+      min-height: 48px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;
+      text-align: left;
+    }
+
+    .station-list button.active {
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1);
+    }
+
+    .bar-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .bar-row {
+      display: grid;
+      gap: 7px;
+    }
+
+    .bar-row div:first-child {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      color: #344054;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .bar-track {
+      height: 10px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #e5eaf0;
+    }
+
+    .bar-fill {
+      width: var(--w);
+      height: 100%;
+      border-radius: inherit;
+      background: var(--c, var(--blue));
+    }
+
+    .event-output {
+      display: grid;
+      gap: 12px;
+    }
+
+    .route-card {
+      padding: 12px;
+      background: #fbfdff;
+    }
+
+    .route-card strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .route-card small {
+      color: var(--muted);
+    }
+    .calendar-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+
+    .calendar-toolbar h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+
+    .month-calendar {
+      display: grid;
+  
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+  
+      gap: 8px;
+
+    }
+
+    .calendar-day-name {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .calendar-cell {
+      min-height: 92px;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: #ffffff;}
+
+    .calendar-cell.muted {  
+      background: #f3f6fa;
+      color: #98a2b3;
+    }
+
+
+    .calendar-date {
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .calendar-event {
+      margin-top: 8px;
+      padding: 6px;
+      border-radius: 6px;
+      background: #fee2e2;
+      color: #991b1b;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1.25;
+    }
+
+    .calendar-event.high {
+      background: #ffedd5;
+      color: #9a3412;
+    }
+
+    .calendar-event.medium {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+    @media (max-width: 1100px) {
+      .grid.cols-4,
+      .grid.cols-3 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .intel-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+    
+
+      .sidebar {
+        position: static;
+        height: auto;
+        padding: 14px;
+      }
+
+      .brand {
+        margin-bottom: 14px;
+      }
+      .logo-mark {
+        background: transparent;
+        padding: 0;
+      }
+
+      .logo-mark svg {
+        display: block;
+      }
+
+      .nav {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .sidebar-footer {
+        position: static;
+        margin-top: 12px;
+      }
+
+      main {
+        padding: 16px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .grid.cols-4,
+      .grid.cols-3,
+      .grid.cols-2,
+      .form-grid,
+      .analysis-results {
+        grid-template-columns: 1fr;
+      }
+
+      .incident-card {
+        grid-template-columns: 1fr;
+      }
+
+      .status-select {
+        width: 100%;
+      }
+
+      .map-wrap {
+        min-height: 420px;
+      }
+    .sidebar {
+     display: flex;
+     flex-direction: column;
+     overflow-y: auto;
+    } 
+
+    .nav {
+     flex: 0 0 auto;
+    }
+
+    .sidebar-footer {
+     position: static;
+     margin-top: auto;
+     width: auto;
+    }
+
+    @media (max-height: 560px) {
+     .sidebar-footer {
+       display: none;
+       }
+     }
+    
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+    <div class="brand">
+     <div class="brand-mark logo-mark">
+       <svg width="60" height="60" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <rect x="35" y="10" width="50" height="100" rx="25" fill="#ffffff"/>
+        <circle cx="60" cy="30" r="10" fill="#ef4444"/>
+        <circle cx="60" cy="60" r="10" fill="#eab308"/>
+        <circle cx="60" cy="90" r="10" fill="#22c55e"/>
+        <circle cx="60" cy="90" r="14" fill="#22c55e" opacity="0.3"/>
+        <path d="M 60 84 L 60 96 M 55 89 L 60 84 L 65 89" fill="none" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+       </svg>
+     </div>
+    <div>
+    <h1>Namma Sanchaar</h1>
+    <p>Traffic Command Center</p>
+  </div>
+</div>
+      <nav class="nav" aria-label="Primary">
+        <button class="active" data-page="dashboard"><span>01</span><span>Dashboard</span></button>
+        <button data-page="report"><span>02</span><span>Report & Track</span></button>
+        <button data-page="predict"><span>03</span><span>Predictive Analysis</span></button>
+        <button data-page="hotspots"><span>04</span><span>Hotspot Map</span></button>
+        <button data-page="intel"><span>05</span><span>Location Intel</span></button>
+        <button data-page="events"><span>06</span><span>Event Risk Planner</span></button>
+      </nav>
+      
+    </aside>
+
+    <main>
+      <div class="topbar">
+        <div class="page-title">
+          <h2 id="pageTitle">Command Center Dashboard</h2>
+          <p id="pageSubtitle">Real-time operating view of incidents, risk areas, and response performance.</p>
+        </div>
+      </div>
+
+      <section class="page active" id="dashboard">
+        <div class="grid cols-4">
+          <article class="metric" style="--accent: var(--blue)">
+            <h3>Active Incidents</h3>
+            <p>Currently open across the city</p>
+            <strong id="activeIncidentCount">23</strong>
+            
+          </article>
+          <article class="metric" style="--accent: var(--green)">
+            <h3>Resolved Today</h3>
+            <p>Closed by command teams</p>
+            <strong>142</strong>
+            
+          </article>
+          <article class="metric" style="--accent: var(--amber)">
+            <h3>Avg Resolution Time</h3>
+            <p>From report to resolved</p>
+            <strong>37m</strong>
+            
+          </article>
+          <article class="metric" style="--accent: var(--red)">
+            <h3>Highest Risk Area</h3>
+            
+            <strong>Whitefield</strong>
+            
+          </article>
+        </div>
+
+        <div class="grid cols-2" style="margin-top: 16px;">
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                
+                <h3>Police-station level risk status</h3>
+              </div>
+            </div>
+            <ul class="risk-list">
+              <li class="risk-row"><div><strong>Whitefield</strong><small>Accidents, breakdowns, water logging</small></div><span class="pill red">Critical</span></li>
+              <li class="risk-row"><div><strong>Hebbal</strong><small>Airport road pressure and stalled vehicles</small></div><span class="pill amber">High</span></li>
+              <li class="risk-row"><div><strong>HSR Layout</strong><small>Evening peak congestion</small></div><span class="pill blue">Medium</span></li>
+              <li class="risk-row"><div><strong>Jayanagar</strong><small>Stable traffic flow</small></div><span class="pill green">Low</span></li>
+            </ul>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h3>Recent Incidents Feed</h3>
+                <p>Latest reports entering the response queue</p>
+              </div>
+            </div>
+            <ul class="feed" id="recentFeed"></ul>
+          </section>
+        </div>
+      </section>
+
+      <section class="page" id="report">
+        <div class="grid cols-2">
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h3>Submit Incident</h3>
+                <p>Creates a new operational record and adds it to the tracker.</p>
+              </div>
+            </div>
+            <form id="incidentForm">
+              <div class="form-grid">
+                <label>Incident Type
+                  <select name="event_type" required>
+                    <option>Accident</option>
+                    <option>Vehicle Breakdown</option>
+                    <option>Water Logging</option>
+                    <option>Road Closure</option>
+                    <option>Tree Fall</option>
+                    <option>VIP Movement</option>
+                  </select>
+                </label>
+                <label>Latitude
+                  <input type="number" step="any" name="latitude" required>
+                </label>
+                <label>Longitude
+                  <input type="number" step="any" name="longitude" required>
+                </label>
+                <label>Location
+                  <input name="location" value="Bellary Road" required />
+                </label>
+                <label>Event Cause
+                  <input type="text" name="event_cause" required>
+                </label>
+                <label>Police Station
+                  <select name="station" required>
+                    <option>Whitefield</option>
+                    <option>Hebbal</option>
+                    <option>HSR Layout</option>
+                    <option>Jayanagar</option>
+                    <option>Indiranagar</option>
+                    <option>Koramangala</option>
+                  </select>
+                </label>
+                <label>Requires Road Closure
+                   <select name="requires_road_closure" required>
+                      <option value="true">Yes</option>
+                      <option value="false">No</option>
+                   </select>
+                </label>
+
+                <label>Priority
+                  <select name="priority" required>
+                    <option>High</option>
+                    
+                    <option>Low</option>
+                  </select>
+                </label>
+                <label class="full">
+                 Start Date & Time
+                 <input type="datetime-local" name="start_datetime" required>
+                </label>
+                <label class="full">Description
+                  <textarea name="description" required>Two-lane disruption reported near the signal. Traffic slowing toward ORR junction.</textarea>
+                </label>
+              </div>
+              <div class="actions">
+                <button class="btn" type="submit">Submit Incident</button>
+                <button class="btn secondary" type="reset">Reset</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h3>Response Stages</h3>
+                <p>Every incident moves through this command workflow.</p>
+              </div>
+            </div>
+            <ul class="timeline">
+              <li class="risk-row"><div><strong>Reported</strong><small>Record created by operator</small></div><span class="pill gray">Queue</span></li>
+              <li class="risk-row"><div><strong>Assigned</strong><small>Station team and patrol allocated</small></div><span class="pill blue">Dispatch</span></li>
+              <li class="risk-row"><div><strong>In Progress</strong><small>Field response active</small></div><span class="pill amber">Live</span></li>
+              <li class="risk-row"><div><strong>Resolved</strong><small>Traffic flow restored</small></div><span class="pill green">Clear</span></li>
+              <li class="risk-row"><div><strong>Closed</strong><small>Record audited and archived</small></div><span class="pill violet">Done</span></li>
+            </ul>
+          </section>
+        </div>
+        
+
+      <section class="panel" style="margin-top: 16px;">
+          <div class="panel-header">
+            <div>
+              <h3>Incident Tracker</h3>
+              <p>Update live response status for previous and newly reported incidents.</p>
+            </div>
+          </div>
+          <div class="tracker" id="tracker"></div>
+        </section>
+      </section>
+
+      <section class="page" id="predict">
+        <div class="grid cols-2">
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h3>Predict Incident Impact</h3>
+                <p>Estimate congestion risk, radius, response resources, and alternate routes.</p>
+              </div>
+            </div>
+            <form id="analysisForm">
+              <div class="form-grid">
+                <label>Event Type
+                 <select name="event_type" required>
+                   <option value="planned">Planned</option>
+                  <option value="unplanned">Unplanned</option>
+                 </select>
+                </label>
+
+                <label>Latitude
+                  <input type="number" step="any" name="latitude" required>
+                </label>
+
+                <label>Longitude
+                 <input type="number" step="any" name="longitude" required>
+                </label>
+
+                <label>Event Cause
+                  <select name="event_cause" required>
+                    <option value="accident">Accident</option>
+                    <option value="vehicle_breakdown">Vehicle Breakdown</option>
+                    <option value="congestion">Congestion</option>
+                    <option value="construction">Construction</option>
+                    <option value="water_logging">Water Logging</option>
+                    <option value="tree_fall">Tree Fall</option>
+                    <option value="public_event">Public Event</option>
+                    <option value="procession">Procession</option>
+                    <option value="vip_movement">VIP Movement</option>
+                    <option value="protest">Protest</option>
+                    <option value="pot_holes">Pot Holes</option>
+                    <option value="road_conditions">Road Conditions</option>
+                  </select>
+               </label>
+
+                <label>Requires Road Closure
+                 <select name="requires_road_closure" required>
+                    <option value="true">Yes</option>
+                    <option value="false">No</option>
+                 </select>
+               </label>
+
+               <label>Priority
+                 <select name="priority" required>
+                    <option>High</option>
+                    <option>Medium</option>
+                    <option>Low</option>
+                 </select>
+               </label>
+
+              <label class="full">
+                Start Date & Time
+                <input type="datetime-local" name="start_datetime" required>
+             </label>
+                
+                
+              </div>
+              <div class="actions">
+                <button class="btn" type="submit">Run Prediction</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="score-card">
+            <div class="score-ring" id="scoreRing" style="--score: 82; --score-color: var(--red);">
+              <div><span id="riskScore">--</span></div>
+            </div>
+            <h3>Congestion Risk Score</h3>
+            <p id="riskLabel" style="color: var(--muted); margin: 0;">High severity expected</p>
+          </section>
+        </div>
+
+        <div class="grid cols-2" style="margin-top: 16px;">
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h3>Prediction Output</h3>
+                <p>AI-generated operational impact estimate.</p>
+              </div>
+            </div>
+            <div class="analysis-results">
+              <div class="result-box"><span>Expected Resolution</span><strong id="resolutionTime">35 min</strong></div>
+              <div class="result-box"><span>Affected Radius</span><strong id="affectedRadius">1.2 km</strong></div>
+              <div class="result-box"><span>Severity</span><strong id="severity">High</strong></div>
+              <div class="result-box"><span>Response Priority</span><strong id="responsePriority">Immediate</strong></div>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                 <h3>Resource Recommendations</h3>
+                 <p>Suggested deployment for field response teams.</p>
+              </div>
+            </div>
+            <div class="analysis-results">
+              <div class="result-box"><span>Traffic Officers</span><strong id="officers">8</strong></div>
+              <div class="result-box"><span>Barricades</span><strong id="barricades">2</strong></div>
+              <div class="result-box"><span>Closest Station</span><strong id="vehicles">1</strong></div>
+              <div class="result-box"><span>Previous Incidents</span><strong id="controlRoom">Alerted</strong></div>
+             </div>
+           </section>
+           </div>
+
+           <section class="panel" style="margin-top: 16px;">
+              <div class="panel-header">
+                <div>
+                 <h3>Alternate Routes</h3>
+                 <p>Recommended diversions to reduce downstream congestion.</p>
+                </div>
+               </div>
+               <div class="grid cols-3" id="alternateRoutes"></div>
+          </section>
+          </section> 
+  
+      <section class="page" id="hotspots">
+        <section class="panel">
+          <div class="panel-header">
+            <div>
+              <h3>City Hotspot Map</h3>
+              <p>Incident-prone zones by type, frequency, and severity.</p>
+            </div>
+            <span class="pill red">Live heat view</span>
+          </div>
+          <div class="map-wrap">
+    <img
+        src="hotspot_map.png"
+        width="100%"
+        height="600"
+        style="
+            object-fit: contain;
+            border-radius: 8px;
+        "
+    >
+</div>
+          <div class="legend">
+            <span><i class="dot" style="--dot: #b91c1c;"></i>Accident hotspot</span>
+            <span><i class="dot" style="--dot: #0891b2;"></i>Water logging</span>
+            <span><i class="dot" style="--dot: #b45309;"></i>Breakdown cluster</span>
+            <span><i class="dot" style="--dot: #15803d;"></i>Low-risk zone</span>
+          </div>
+        </section>
+      </section>
+             
+
+      <section class="page" id="intel">
+        <div class="intel-layout">
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h3>Police Stations</h3>
+                <p>Select a station to inspect local intelligence.</p>
+              </div>
+            </div>
+            <div class="station-list" id="stationList"></div>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h3 id="stationName">Whitefield Intelligence</h3>
+                <p>Incident patterns, priority split, causes, and peak hours.</p>
+              </div>
+              <span class="pill red" id="stationRiskPill">Risk 91</span>
+            </div>
+            <div class="grid cols-4">
+              <article class="metric"><h3>Total Incidents</h3><strong id="intelTotal">316</strong><small>Last 30 days</small></article>
+              <article class="metric"><h3>High Priority</h3><strong id="intelHigh">42%</strong><small>Escalation share</small></article>
+              <article class="metric"><h3>Low Priority</h3><strong id="intelLow">21%</strong><small>Low impact cases</small></article>
+              <article class="metric"><h3>Avg Resolution</h3><strong id="intelAvg">44m</strong><small>Station response time</small></article>
+            </div>
+            <div class="grid cols-2" style="margin-top: 16px;">
+              <div class="panel" style="box-shadow: none;">
+                <div class="panel-header">
+                  <div>
+                    <h3>Top Causes</h3>
+                    <p>Most frequent local triggers</p>
+                  </div>
+                </div>
+                <div class="bar-list" id="causeBars"></div>
+              </div>
+              <div class="panel" style="box-shadow: none;">
+                <div class="panel-header">
+                  <div>
+                    <h3>Peak Hours</h3>
+                    <p>Times with highest incident density</p>
+                  </div>
+                </div>
+                <div class="bar-list" id="hourBars"></div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="page" id="events">
+        <div class="grid cols-2">
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h3>Plan an Event</h3>
+                <p>Simulate event congestion and generate deployment guidance.</p>
+              </div>
+            </div>
+            <form id="eventForm">
+              <div class="form-grid">
+                <label>Event Name
+                  <input name="name" value="Royal Challengers Match" />
+                </label>
+                <label>Event Type
+                  <select name="event_type"required>
+                    <option>Cricket Match</option>
+                    <option>Concert</option>
+                    <option>Political Rally</option>
+                    <option>Marathon</option>
+                    <option>Festival</option>
+                  </select>
+                </label>
+                <label>Location
+                  <select name="location">
+                    <option>Chinnaswamy Stadium</option>
+                    <option>Palace Grounds</option>
+                    <option>Kanteerava Stadium</option>
+                    <option>MG Road</option>
+                    <option>Freedom Park</option>
+                  </select>
+                </label>
+                <label>Latitude
+                  <input type="number" step="any" name="latitude" required>
+                </label>
+                <label>Longitude
+                  <input type="number" step="any" name="longitude" required>
+                </label>
+                <label>Event Cause
+                  <input type="text" name="event_cause" placeholder="Religious gathering, sports match, etc." required>
+                </label>
+               <label>Requires Road Closure
+                    <select name="requires_road_closure" required>
+                      <option value="true">Yes</option>
+                      <option value="false">No</option>
+                    </select>
+                </label>
+                <label>Priority
+                  <select name="priority" required>
+                     <option>High</option>
+                     <option>Medium</option>
+                     <option>Low</option>
+                  </select>
+                </label>
+                <label class="full">Start Date & Time
+                  <input type="datetime-local" name="start_datetime" required>
+                </label>
+                
+                <label>Expected Crowd
+                  <input name="crowd" type="number" value="40000" min="100" step="100" />
+                </label>
+                
+              </div>
+              <div class="actions">
+                <button class="btn" type="submit">Simulate Event Risk</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="panel">
+            <div class="panel-header">
+              <div>
+                <h3>Event Prediction</h3>
+                <p>Planning output for crowd movement and field deployment.</p>
+              </div>
+              <span class="pill red" id="eventSeverityPill">Severe</span>
+            </div>
+            <div class="event-output">
+              <div class="analysis-results">
+                <div class="result-box"><span>Risk Score</span><strong id="eventRisk">92</strong></div>
+                <div class="result-box"><span>Congestion</span><strong id="eventCongestion">Severe</strong></div>
+                <div class="result-box"><span>Officers</span><strong id="eventOfficers">15</strong></div>
+                <div class="result-box"><span>Barricades</span><strong id="eventBarricades">5</strong></div>
+              </div>
+              <div class="route-card">
+                <strong id="eventDiversion">Recommended Diversion: Cubbon Road → Minsk Square → Infantry Road</strong>
+                <small id="eventNote">Pre-position patrol vehicles 45 minutes before start time.</small>
+              </div>
+              <button class="btn" id="markEventBtn" type="button">Mark on Calendar</button>
+            </div>
+          </section>
+        </div>
+
+        <section class="panel" style="margin-top: 16px;">
+          <div class="panel-header">
+            <div>
+              <h3>Event Calendar</h3>
+              <p>Upcoming events monitored by the command center.</p>
+            </div>
+          </div>
+          <div class="calendar-toolbar">
+              <button class="btn secondary" id="prevMonth" type="button">Prev</button>
+              <h3 id="calendarTitle">June 2026</h3>
+              <button class="btn secondary" id="nextMonth" type="button">Next</button>
+          </div>
+
+          <div class="month-calendar" id="eventCalendar"></div>
+          
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    const pageMeta = {
+      dashboard: ["Command Center Dashboard", "Real-time operating view of incidents, risk areas, and response performance."],
+      report: ["Report & Track", "Submit incidents and update their live operational status."],
+      predict: ["Predictive Analysis", "Estimate incident impact, affected radius, alternate routes, and resources."],
+      hotspots: ["Hotspot Map", "Visual intelligence for high-risk traffic incident zones."],
+      intel: ["Location Intelligence", "Police-station analytics for causes, peak hours, and risk scores."],
+      events: ["Event Risk Planner", "Plan crowd-heavy events with congestion and resource forecasts."]
+    };
+
+    const incidents = [
+      { id: "INC-124", type: "Accident", location: "Whitefield Main Road", station: "Whitefield", priority: "High", status: "In Progress", opened: 27 },
+      { id: "INC-125", type: "Vehicle Breakdown", location: "Hebbal Flyover", station: "Hebbal", priority: "Medium", status: "Assigned", opened: 18 },
+      { id: "INC-126", type: "Water Logging", location: "Outer Ring Road", station: "HSR Layout", priority: "High", status: "Reported", opened: 9 },
+      { id: "INC-127", type: "Tree Fall", location: "Jayanagar 4th Block", station: "Jayanagar", priority: "Low", status: "Resolved", opened: 52 }
+    ];
+
+    const stationIntel = {
+      Whitefield: {
+        risk: 91, total: 316, high: 42, low: 21, avg: 44,
+        causes: [["Accidents", 78, "#b91c1c"], ["Breakdowns", 66, "#b45309"], ["Water logging", 48, "#0891b2"], ["Road closures", 35, "#6d28d9"]],
+        hours: [["6 PM - 8 PM", 88, "#b91c1c"], ["8 AM - 10 AM", 72, "#b45309"], ["12 PM - 2 PM", 43, "#1d4ed8"]]
+      },
+      Hebbal: {
+        risk: 84, total: 284, high: 37, low: 25, avg: 41,
+        causes: [["Breakdowns", 74, "#b45309"], ["Accidents", 59, "#b91c1c"], ["VIP movement", 42, "#6d28d9"], ["Road closures", 39, "#1d4ed8"]],
+        hours: [["7 PM - 9 PM", 81, "#b91c1c"], ["7 AM - 9 AM", 76, "#b45309"], ["4 PM - 6 PM", 51, "#1d4ed8"]]
+      },
+      "HSR Layout": {
+        risk: 72, total: 211, high: 28, low: 34, avg: 36,
+        causes: [["Accidents", 55, "#b91c1c"], ["Road closures", 46, "#6d28d9"], ["Breakdowns", 44, "#b45309"], ["Water logging", 30, "#0891b2"]],
+        hours: [["6 PM - 8 PM", 68, "#b45309"], ["9 AM - 11 AM", 54, "#1d4ed8"], ["2 PM - 4 PM", 31, "#15803d"]]
+      },
+      Jayanagar: {
+        risk: 48, total: 132, high: 18, low: 49, avg: 29,
+        causes: [["Illegal parking", 44, "#1d4ed8"], ["Breakdowns", 36, "#b45309"], ["Accidents", 29, "#b91c1c"], ["Tree fall", 18, "#15803d"]],
+        hours: [["5 PM - 7 PM", 49, "#1d4ed8"], ["10 AM - 12 PM", 32, "#15803d"], ["8 PM - 10 PM", 24, "#15803d"]]
+      }
+    };
+
+    const routeSets = {
+      "Bellary Road": ["Service Road via Sahakar Nagar", "Thanisandra Main Road", "Airport Road slip diversion"],
+      "Whitefield Main Road": ["Varthur Road", "ITPL Back Gate corridor", "Graphite India diversion"],
+      "Outer Ring Road": ["Sarjapur Road", "Harlur Road", "HSR 27th Main"],
+      "Silk Board Junction": ["BTM 16th Main", "Madiwala underpass", "Hosur Road service lane"],
+      "MG Road": ["Cubbon Road", "Residency Road", "St. Mark's Road"],
+      "Chinnaswamy Stadium": ["Cubbon Road", "Minsk Square", "Infantry Road"]
+    };
+
+    const calendar = [
+      ["Royal Challengers Match", "Chinnaswamy Stadium", "Today, 6:30 PM", "Severe"],
+      ["Tech Park Marathon", "Whitefield", "Tomorrow, 5:30 AM", "High"],
+      ["Cultural Festival", "Freedom Park", "24 Jun, 4:00 PM", "Medium"]
+    ];
+
+    function riskColor(score) {
+      if (score >= 80) return ["var(--red)", "High severity expected", "red"];
+      if (score >= 65) return ["var(--amber)", "Elevated congestion risk", "amber"];
+      if (score >= 45) return ["var(--blue)", "Moderate operational impact", "blue"];
+      return ["var(--green)", "Low operational impact", "green"];
+    }
+
+    function priorityWeight(priority) {
+      return priority === "High" ? 18 : priority === "Medium" ? 8 : 0;
+    }
+
+    function typeWeight(type) {
+      return {
+        "Accident": 20,
+        "Vehicle Breakdown": 14,
+        "Water Logging": 18,
+        "Road Closure": 22,
+        "Tree Fall": 11,
+        "VIP Movement": 17
+      }[type] || 10;
+    }
+         
+    function locationWeight(location) {
+      return {
+        "Bellary Road": 18,
+        "Whitefield Main Road": 21,
+        "Outer Ring Road": 19,
+        "Silk Board Junction": 24,
+        "MG Road": 15,
+        "Chinnaswamy Stadium": 20
+      }[location] || 12;
+    }
+
+    function timeWeight(time) {
+      const hour = Number(time.split(":")[0]);
+      if ((hour >= 8 && hour <= 10) || (hour >= 17 && hour <= 20)) return 18;
+      if (hour >= 21 || hour <= 5) return 6;
+      return 10;
+    }
+
+    function calculatePrediction(type, location, time, priority) {
+      const score = Math.min(98, 28 + typeWeight(type) + locationWeight(location) + timeWeight(time) + priorityWeight(priority));
+      const resolution = Math.round(18 + score * 0.35 + (priority === "High" ? 6 : 0));
+      const radius = (0.4 + score / 100 * 1.25).toFixed(1);
+      const officers = Math.max(3, Math.round(score / 11));
+      const barricades = Math.max(1, Math.round(score / 34));
+      const vehicles = Math.max(1, Math.round(score / 55));
+      return { score, resolution, radius, officers, barricades, vehicles };
+    }
+
+    function setPage(page) {
+      document.querySelectorAll(".page").forEach(el => el.classList.toggle("active", el.id === page));
+      document.querySelectorAll(".nav button").forEach(el => el.classList.toggle("active", el.dataset.page === page));
+      document.getElementById("pageTitle").textContent = pageMeta[page][0];
+      document.getElementById("pageSubtitle").textContent = pageMeta[page][1];
+    }
+
+    function renderFeed() {
+      const feed = document.getElementById("recentFeed");
+      feed.innerHTML = incidents.slice(0, 5).map((incident, index) => `
+        <li class="feed-row no-icon">
+        
+          <div><strong>${incident.type}</strong><small>${incident.location} · ${incident.station}</small></div>
+          <small>${incident.opened}m ago</small>
+        </li>
+      `).join("");
+      document.getElementById("activeIncidentCount").textContent = incidents.filter(item => !["Resolved", "Closed"].includes(item.status)).length + 19;
+    }
+
+    function renderTracker() {
+      const tracker = document.getElementById("tracker");
+      tracker.innerHTML = incidents.map(incident => `
+        <article class="incident-card">
+          <div>
+            <h4>${incident.id} · ${incident.type}</h4>
+            <div class="incident-meta">
+              <span>${incident.location}</span>
+              <span>${incident.station}</span>
+              <span>${incident.priority} priority</span>
+              <span>Open since ${incident.opened} min</span>
+            </div>
+          </div>
+          <label>Status
+            <select class="status-select" data-id="${incident.id}">
+              ${["Reported", "Assigned", "In Progress", "Resolved", "Closed"].map(status => `<option ${status === incident.status ? "selected" : ""}>${status}</option>`).join("")}
+            </select>
+          </label>
+        </article>
+      `).join("");
+    }
+
+    function renderRoutes(location) {
+      const routes = routeSets[location] || routeSets["Bellary Road"];
+      document.getElementById("alternateRoutes").innerHTML = routes.map((route, index) => `
+        <div class="route-card">
+          <strong>Route ${index + 1}: ${route}</strong>
+          <small>Use for staged diversion and dynamic signage updates.</small>
+        </div>
+      `).join("");
+    }
+
+    function updateAnalysis(result, location) {
+      const [color, label] = riskColor(result.score);
+      document.getElementById("scoreRing").style.setProperty("--score", result.score);
+      document.getElementById("scoreRing").style.setProperty("--score-color", color);
+      document.getElementById("riskScore").textContent = result.score;
+      document.getElementById("riskLabel").textContent = label;
+      document.getElementById("resolutionTime").textContent = `${result.resolution} min`;
+      document.getElementById("affectedRadius").textContent = `${result.radius} km`;
+      document.getElementById("severity").textContent = result.score >= 80 ? "High" : result.score >= 65 ? "Medium-High" : "Medium";
+      document.getElementById("responsePriority").textContent = result.score >= 75 ? "Immediate" : "Scheduled";
+      document.getElementById("officers").textContent = result.officers;
+      document.getElementById("barricades").textContent = result.barricades;
+      document.getElementById("vehicles").textContent = result.vehicles;
+      document.getElementById("controlRoom").textContent = result.score >= 75 ? "Alerted" : "Monitoring";
+      renderRoutes(location);
+    }
+    function updateBackendResults(result) {
+
+    console.log(result);
+
+  const score =
+    Math.round(result.congestion_risk_score);
+
+
+
+    let color;
+
+    let label;
+
+
+
+    if(score < 25){
+
+
+
+        color = "var(--green)";
+
+        label = "Low Risk";
+
+
+
+    }
+
+    else if(score < 50){
+
+
+
+        color = "var(--blue)";
+
+        label = "Moderate Risk";
+
+
+
+    }
+
+    else if(score < 75){
+
+
+
+        color = "var(--amber)";
+
+        label = "High Risk";
+
+
+
+    }
+
+    else{
+
+
+
+        color = "var(--red)";
+
+        label = "Critical Risk";
+
+
+
+    }
+
+
+
+    document
+
+        .getElementById("riskScore")
+
+        .textContent = score;
+
+
+
+    document
+
+        .getElementById("riskLabel")
+
+        .textContent = label;
+
+
+
+    document
+
+        .getElementById("scoreRing")
+
+        .style
+
+        .setProperty("--score", score);
+
+
+
+    document
+
+        .getElementById("scoreRing")
+
+        .style
+
+        .setProperty("--score-color", color);
+
+    document
+        .getElementById("resolutionTime")
+        .textContent =
+        result.historical_density_500m + " nearby incidents";
+
+    document
+        .getElementById("affectedRadius")
+        .textContent =
+        "500 m";
+
+    document
+        .getElementById("severity")
+        .textContent =
+        result.diversion_recommendation;
+
+    document
+        .getElementById("responsePriority")
+        .textContent =
+        result.nearest_police_station;
+
+    document
+        .getElementById("officers")
+        .textContent =
+        result.personnel_number;
+
+    document
+        .getElementById("barricades")
+        .textContent =
+        result.barricading_number;
+
+    document
+        .getElementById("vehicles")
+        .textContent =
+        result.distance_to_police_station_m + " m";
+
+    document
+        .getElementById("controlRoom")
+        .textContent =
+        result.police_station_incidents;
+
+}
+
+    function renderStations(active = "Whitefield") {
+      document.getElementById("stationList").innerHTML = Object.entries(stationIntel).map(([name, data]) => `
+        <button class="${name === active ? "active" : ""}" data-station="${name}">
+          <strong>${name}</strong>
+          <span class="pill ${data.risk >= 80 ? "red" : data.risk >= 65 ? "amber" : "green"}">${data.risk}</span>
+        </button>
+      `).join("");
+      updateIntel(active);
+    }
+
+    function renderBars(target, data) {
+      document.getElementById(target).innerHTML = data.map(([label, value, color]) => `
+        <div class="bar-row">
+          <div><span>${label}</span><span>${value}%</span></div>
+          <div class="bar-track"><div class="bar-fill" style="--w:${value}%; --c:${color};"></div></div>
+        </div>
+      `).join("");
+    }
+
+    function updateIntel(station) {
+      const data = stationIntel[station];
+      document.getElementById("stationName").textContent = `${station} Intelligence`;
+      document.getElementById("stationRiskPill").textContent = `Risk ${data.risk}`;
+      document.getElementById("stationRiskPill").className = `pill ${data.risk >= 80 ? "red" : data.risk >= 65 ? "amber" : "green"}`;
+      document.getElementById("intelTotal").textContent = data.total;
+      document.getElementById("intelHigh").textContent = `${data.high}%`;
+      document.getElementById("intelLow").textContent = `${data.low}%`;
+      document.getElementById("intelAvg").textContent = `${data.avg}m`;
+      renderBars("causeBars", data.causes);
+      renderBars("hourBars", data.hours);
+    }
+
+    let calendarDate = new Date(2026, 5, 1);
+
+    let plannedEvents = [
+       {
+          name: "Royal Challengers Match",
+          location: "Chinnaswamy Stadium",
+          date: "2026-06-21",
+          severity: "Severe"
+       },
+       {
+          name: "Tech Park Marathon",
+          location: "Whitefield",
+          date: "2026-06-22",
+          severity: "High"
+       },
+       {
+          name: "Cultural Festival",
+          location: "Freedom Park",
+          date: "2026-06-24",
+          severity: "Medium"
+        }
+    ];
+
+    let latestSimulatedEvent = null;
+
+    function formatDateKey(date) {
+       return date.toISOString().slice(0, 10);
+    }
+
+    function renderCalendar() {
+       const calendar = document.getElementById("eventCalendar");
+       const title = document.getElementById("calendarTitle");
+
+       const year = calendarDate.getFullYear();
+       const month = calendarDate.getMonth();
+
+       title.textContent = calendarDate.toLocaleDateString("en-IN", {
+           month: "long",
+           year: "numeric"
+        });
+
+       const firstDay = new Date(year, month, 1);
+       const startDate = new Date(firstDay);
+       startDate.setDate(startDate.getDate() - firstDay.getDay());
+
+       const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+       let html = dayNames.map(day => `
+           <div class="calendar-day-name">${day}</div>
+       `).join("");
+
+       for (let i = 0; i < 42; i++) {
+           const date = new Date(startDate);
+           date.setDate(startDate.getDate() + i);
+
+           const dateKey = formatDateKey(date);
+           const eventsForDay = plannedEvents.filter(event => event.date === dateKey);
+           const isMuted = date.getMonth() !== month;
+
+           html += `
+              <div class="calendar-cell ${isMuted ? "muted" : ""}">
+                  <div class="calendar-date">${date.getDate()}</div>
+                  ${eventsForDay.map(event => `
+                     <div class="calendar-event ${event.severity === "High" ? "high" : event.severity === "Medium" ? "medium" : ""}">
+                     ${event.name}<br>
+                     ${event.location}
+                  </div>
+               `).join("")}
+              </div>
+          `;
+        }
+
+       calendar.innerHTML = html;
+    }
+    document.querySelectorAll(".nav button").forEach(button => {
+      button.addEventListener("click", () => setPage(button.dataset.page));
+    });
+
+    document.getElementById("incidentForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const data = Object.fromEntries(new FormData(event.currentTarget).entries());
+      updateAnalysis(
+        calculatePrediction(
+          data.type,
+          data.location,
+          data.time,
+          data.priority
+        ),
+        data.location
+      );
+      incidents.unshift({
+        id: `INC-${128 + incidents.length}`,
+        type: data.type,
+        location: data.location,
+        station: data.station,
+        priority: data.priority,
+        status: "Reported",
+        opened: 1
+      });
+      renderFeed();
+      renderTracker();
+      event.currentTarget.reset();
+    });
+
+    document.getElementById("tracker").addEventListener("change", event => {
+      if (!event.target.matches(".status-select")) return;
+      const incident = incidents.find(item => item.id === event.target.dataset.id);
+      incident.status = event.target.value;
+      renderFeed();
+    });
+
+    document.getElementById("analysisForm").addEventListener("submit", async (event) => {
+
+    event.preventDefault();
+
+    const data = Object.fromEntries(
+        new FormData(event.currentTarget).entries()
+    );
+
+    const payload = {
+        event_type: data.event_type.toLowerCase(),
+        latitude: parseFloat(data.latitude),
+        longitude: parseFloat(data.longitude),
+        event_cause: data.event_cause,
+        requires_road_closure:
+            data.requires_road_closure === "true",
+        priority: data.priority,
+        start_datetime: data.start_datetime
+    };
+
+    try {
+
+        const response = await fetch(
+            "http://127.0.0.1:8000/predict",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            }
+        );
+
+        const result = await response.json();
+
+        console.log(result);
+
+        updateBackendResults(result);
+
+    } catch (err) {
+
+        console.error(err);
+
+        alert("Backend connection failed");
+
+    }
+
+});
+
+    document.getElementById("stationList").addEventListener("click", event => {
+      const button = event.target.closest("button[data-station]");
+      if (!button) return;
+      renderStations(button.dataset.station);
+    });
+
+    document.getElementById("eventForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const data = Object.fromEntries(new FormData(event.currentTarget).entries());
+      console.log(data);
+      const crowd = Number(data.crowd);
+      const startHour = new Date(data.start_datetime).getHours() ;
+      const score = Math.min(99, Math.round(38 + crowd / 900 + (startHour >= 17 && startHour <= 21 ? 16 : 6)));
+      const congestion = score >= 88 ? "Severe" : score >= 72 ? "High" : "Moderate";
+      document.getElementById("eventRisk").textContent = score;
+      document.getElementById("eventCongestion").textContent = congestion;
+      document.getElementById("eventOfficers").textContent = Math.max(6, Math.round(score / 6));
+      document.getElementById("eventBarricades").textContent = Math.max(2, Math.round(score / 18));
+      document.getElementById("eventSeverityPill").textContent = congestion;
+      document.getElementById("eventSeverityPill").className = `pill ${congestion === "Severe" ? "red" : congestion === "High" ? "amber" : "blue"}`;
+      document.getElementById("eventDiversion").textContent = `Recommended Diversion: ${routeSets[data.location]?.join(" → ") || "Primary ring diversion"}`;
+      document.getElementById("eventNote").textContent = `Deploy teams 45 minutes before ${data.name} starts and hold clearance buffer until ${data.end}.`;
+      latestSimulatedEvent = {
+          name: data.name,
+          location: data.location,
+          date: "data.date",
+           severity: congestion
+        };
+      console.log("Saved event:", latestSimulatedEvent);
+    });
+      document.getElementById("prevMonth").addEventListener("click", () => {
+         calendarDate.setMonth(calendarDate.getMonth() - 1);
+         renderCalendar();
+       });
+
+      document.getElementById("nextMonth").addEventListener("click", () => {
+         calendarDate.setMonth(calendarDate.getMonth() + 1);
+         renderCalendar();
+       });
+
+      document.getElementById("markEventBtn").addEventListener("click", () => {
+        console.log("Button clicked");
+
+         if (!latestSimulatedEvent){
+           console.log("No event saved");
+          
+         return;
+         }
+         console.log("Adding event:", latestSimulatedEvent);
+
+         plannedEvents.push(latestSimulatedEvent);
+         calendarDate = new Date(latestSimulatedEvent.date + "T00:00:00");
+         renderCalendar();
+       });
+
+       async function loadDashboard() {
+
+    const response = await fetch(
+        "http://127.0.0.1:8000/dashboard"
+    );
+
+    const data = await response.json();
+
+    document.getElementById(
+        "activeIncidentCount"
+    ).textContent =
+        data.active_incidents;
+
+    document.querySelectorAll(
+        ".metric strong"
+    )[3].textContent =
+        data.highest_risk_station;
+}
+    
+    renderFeed();
+    renderTracker();
+    renderRoutes("Bellary Road");
+    renderStations();
+    renderCalendar();
+    loadDashboard();
+  </script>
+</body>
+</html>
